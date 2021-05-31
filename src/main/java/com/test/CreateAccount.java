@@ -13,24 +13,20 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.SendKeysAction;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class EditAccounts {
+public class CreateAccount {
 
 	ChromeDriver driver ;
-	JavascriptExecutor js;
 	Robot robot;
 	
 	@Test
-	public void editAcct() throws InterruptedException, AWTException{
+	public void createAcct() throws InterruptedException, AWTException{
 		
-		js = (JavascriptExecutor) driver;
 		WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--disable-notifications");
@@ -58,56 +54,36 @@ public class EditAccounts {
 		((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", accounts);
 		wait.until(ExpectedConditions.elementToBeClickable(accounts)).click();
 		
-		WebElement acctName = driver.findElement(By.xpath("//input[@name='Account-search-input']"));
-		wait.until(ExpectedConditions.elementToBeClickable(acctName)).sendKeys("Ragu");
-		Thread.sleep(3000);
-		acctName.sendKeys(Keys.ENTER);
-		Thread.sleep(3000);
+		driver.findElement(By.xpath("//div[@title='New']")).click();
+		driver.findElement(By.xpath("//input[@name='Name']")).sendKeys("Ragu_Accounts_TC");
 		
-		/*robot = new Robot();
-		for (int i = 0; i < 1; i++) {
-			robot.keyPress(KeyEvent.VK_CONTROL);
-			robot.keyPress(KeyEvent.VK_SUBTRACT);
-			robot.keyRelease(KeyEvent.VK_SUBTRACT);
-			robot.keyRelease(KeyEvent.VK_CONTROL);
-		}*/
+		/*Thread.sleep(15000);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(100,250)");
 		
-
-		Thread.sleep(3000);	
-		driver.findElement(By.xpath("(//label[@class='slds-checkbox']/span[1])[2]")).click();
+		driver.findElement(By.xpath("//label[text()='Ownership']/following::input")).click();
 		
-	List<WebElement> totSize = driver.findElements(By.xpath("//table/tbody/tr[1]/td"));
-	System.out.println("Total Size :"+ totSize.size());
-	
-	//for(int i=1;i<=totSize.size();i++)
-	//{
-		
-		driver.findElement(By.xpath("//table/tbody/tr[1]/td[5]")).click();
-		driver.findElement(By.xpath("//table/tbody/tr[1]/td[5]")).sendKeys(Keys.TAB);
-	//}
-		
-		/*for(int i=1;i<=7;i++)
+		List<WebElement> ownership = driver.findElements(By.xpath("//label[text()='Ownership']/following::span"));
+		for(int i=0;i<ownership.size();i = i+3)
 		{
-			driver.findElement(By.xpath("//table//a[@title]//*[@data-key='down']")).sendKeys(Keys.TAB);
-		}
-		
-		driver.findElement(By.xpath("//table//a[@title]//*[@data-key='down']")).sendKeys(Keys.ENTER);*/
-		
-		WebElement drpDown = driver.findElement(By.xpath("(//table//a[@title]//*[@data-key='down'])[1]"));
-		js.executeScript("arguments[0].click();", drpDown);
-		//drpDown.click();	
-		
-		Thread.sleep(10000);			
-		driver.findElement(By.xpath("(//div[text()='Edit'])[1]")).click();
-		
-		/*robot = new Robot();
-		for (int i = 0; i < 1; i++) {
-			robot.keyPress(KeyEvent.VK_CONTROL);
-			robot.keyPress(KeyEvent.VK_ADD);
-			robot.keyRelease(KeyEvent.VK_ADD);
-			robot.keyRelease(KeyEvent.VK_CONTROL);
+			String ownerVal = driver.findElement(By.xpath("//label[text()='Ownership']/following::span["+i+"]")).getText();
+			if(ownerVal.equalsIgnoreCase("Public"))
+			{
+				driver.findElement(By.xpath("//label[text()='Ownership']/following::span["+i+"]")).click();
+				break;
+			}
 		}*/
-		
+		driver.findElement(By.xpath("//button[text()='Save']")).click();
+		WebElement sucessMsg = driver.findElement(By.xpath("//span[text()='Account']//div"));
+		wait.until(ExpectedConditions.visibilityOf(sucessMsg));
+		System.out.println("Message is "+sucessMsg.getText());		
+
+		if (sucessMsg.getText().contains("Ragu_Accounts_TC")) {
+			System.out.println("New account  is created");
+
+		} else {
+			System.out.println("New account creation failed");
+		}
 		
 		
 	}
