@@ -3,11 +3,11 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.test.DeleteAccount">
+      <class name="com.test.NonprofitCerti">
         <methods>
-          <include name="deleteAcct"/>
+          <include name="nonProfit"/>
         </methods>
-      </class> <!-- com.test.DeleteAccount -->
+      </class> <!-- com.test.NonprofitCerti -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
