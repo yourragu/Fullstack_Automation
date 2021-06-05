@@ -1,8 +1,10 @@
 package com.test;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -20,7 +22,7 @@ public class EditworkType {
 
 	@Test
 
-	public void deleteworkTyp() throws InterruptedException {
+	public void deleteworkTyp() throws InterruptedException, IOException {
 		WebDriverManager.chromedriver().setup();
 		//System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
@@ -30,22 +32,17 @@ public class EditworkType {
 		options.addArguments("disable-infobars");
 		options.addArguments("--disable-popup-blocking");
 		
-		Map<String, Object> prefs = new HashMap<String, Object>();
+		FileInputStream file = new FileInputStream(".\\src\\main\\resources\\utils\\config.properties");
+		Properties prop = new Properties();
+		prop.load(file);
 
-		//add key and value to map as follow to switch off browser notification
-		//Pass the argument 1 to allow and 2 to block
-		prefs.put("profile.default_content_setting_values.notifications", 2);
-
-	// set ExperimentalOption - prefs 
-		options.setExperimentalOption("prefs", prefs);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		
-		
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));	
-		driver.manage().window().maximize();
 		driver.get("https://login.salesforce.com/");
+		//driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-		driver.findElement(By.id("username")).sendKeys("mercury.bootcamp@testleaf.com");
-		driver.findElement(By.id("password")).sendKeys("Bootcamp$123");
+		driver.findElement(By.id("username")).sendKeys(prop.getProperty("username"));
+		driver.findElement(By.id("password")).sendKeys(prop.getProperty("password"));
 		driver.findElement(By.id("Login")).click();
 		WebElement appLauncher = driver.findElement(By.xpath("//div[@role='navigation']//button[1]"));
 		wait.until(ExpectedConditions.elementToBeClickable(appLauncher)).click();

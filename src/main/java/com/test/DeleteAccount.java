@@ -3,8 +3,12 @@ package com.test;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -25,7 +29,7 @@ public class DeleteAccount {
 	Robot robot;
 	
 	@Test
-	public void deleteAcct() throws InterruptedException, AWTException{
+	public void deleteAcct() throws InterruptedException, AWTException, IOException{
 		
 		WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
@@ -35,14 +39,18 @@ public class DeleteAccount {
 		options.addArguments("--disable-popup-blocking");
 		options.addArguments("start-maximized");
 		driver = new ChromeDriver(options);
+		
+		FileInputStream file = new FileInputStream(".\\src\\main\\resources\\utils\\config.properties");
+		Properties prop = new Properties();
+		prop.load(file);
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		
 		driver.get("https://login.salesforce.com/");
 		//driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-		driver.findElement(By.id("username")).sendKeys("mercury.bootcamp@testleaf.com");
-		driver.findElement(By.id("password")).sendKeys("Bootcamp$123");
+		driver.findElement(By.id("username")).sendKeys(prop.getProperty("username"));
+		driver.findElement(By.id("password")).sendKeys(prop.getProperty("password"));
 		driver.findElement(By.id("Login")).click();
 		
 		WebElement appLauncher = driver.findElement(By.xpath("//div[@role='navigation']//button[1]"));

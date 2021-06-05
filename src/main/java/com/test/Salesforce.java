@@ -1,7 +1,11 @@
 package com.test;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -19,21 +23,23 @@ public class Salesforce {
 
 	@Test
 
-	public void sales() throws InterruptedException {
+	public void sales() throws InterruptedException, IOException {
 		WebDriverManager.chromedriver().setup();
 		//System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		ChromeDriver driver = new ChromeDriver(options);
 		options.addArguments("--disable-notifications");
+		FileInputStream file = new FileInputStream(".\\src\\main\\resources\\utils\\config.properties");
+		Properties prop = new Properties();
+		prop.load(file);
+
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-
 		
-
 		driver.get("https://login.salesforce.com/");
-		driver.manage().window().maximize();
+		//driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-		driver.findElement(By.id("username")).sendKeys("mercury.bootcamp@testleaf.com");
-		driver.findElement(By.id("password")).sendKeys("Bootcamp$123");
+		driver.findElement(By.id("username")).sendKeys(prop.getProperty("username"));
+		driver.findElement(By.id("password")).sendKeys(prop.getProperty("password"));
 		driver.findElement(By.id("Login")).click();
 		driver.findElement(By.xpath("//div[contains(@class,'slds-icon-waffle')]")).click();
 		driver.findElement(By.xpath("//button[text()='View All']")).click();
