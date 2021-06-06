@@ -82,7 +82,7 @@ public class NonprofitCerti {
 				}
 			}
 		}
-
+		
 		Set<String> windowHandles = driver.getWindowHandles();
 		for (String window : windowHandles) {
 			driver.switchTo().window(window);
