@@ -48,7 +48,7 @@ public class ShadowRoot {
 
 		Thread.sleep(3000);
 
-		WebElement drpDown = (WebElement) jse.executeScript(
+		/*WebElement drpDown = (WebElement) jse.executeScript(
 				"return document.querySelector(\"body > settings-ui\").shadowRoot.querySelector(\"#main\").shadowRoot.querySelector(\"settings-basic-page\").shadowRoot.querySelector(\"#basicPage > settings-section:nth-child(8) > settings-privacy-page\").shadowRoot.querySelector(\"settings-clear-browsing-data-dialog\").shadowRoot.querySelector(\"#clearFromBasic\").shadowRoot.querySelector(\"#dropdownMenu\")");
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", drpDown);
 		Thread.sleep(3000);
@@ -56,7 +56,7 @@ public class ShadowRoot {
 		WebElement option = (WebElement) jse.executeScript(
 				"return document.querySelector(\"body > settings-ui\").shadowRoot.querySelector(\"#main\").shadowRoot.querySelector(\"settings-basic-page\").shadowRoot.querySelector(\"#basicPage > settings-section:nth-child(8) > settings-privacy-page\").shadowRoot.querySelector(\"settings-clear-browsing-data-dialog\").shadowRoot.querySelector(\"#clearFromBasic\").shadowRoot.querySelector(\"#dropdownMenu > option:nth-child(5)\")");
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
-		Thread.sleep(3000);
+		Thread.sleep(3000);*/
 		WebElement clearBtn = (WebElement) jse.executeScript(
 				"return document.querySelector(\"body > settings-ui\").shadowRoot.querySelector(\"#main\").shadowRoot.querySelector(\"settings-basic-page\").shadowRoot.querySelector(\"#basicPage > settings-section:nth-child(8) > settings-privacy-page\").shadowRoot.querySelector(\"settings-clear-browsing-data-dialog\").shadowRoot.querySelector(\"#clearBrowsingDataConfirm\")");
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", clearBtn);
