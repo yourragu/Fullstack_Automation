@@ -20,15 +20,31 @@ import org.testng.annotations.Test;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Salesforce extends TestNGHooks{
+	
+	JavascriptExecutor js;
+	
+	public void launchBrowser()
+	{
+		driver.get("https://login.salesforce.com/");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		driver.findElement(By.id("username")).sendKeys(prop.getProperty("username"));
+		driver.findElement(By.id("password")).sendKeys(prop.getProperty("password"));
+		driver.findElement(By.id("Login")).click();
+	}
 
 
 	@Test
-	public void sales() throws InterruptedException, IOException {		
+	public void sales() throws InterruptedException, IOException {
+		launchBrowser();		
 		driver.findElement(By.xpath("//div[contains(@class,'slds-icon-waffle')]")).click();
 		driver.findElement(By.xpath("//button[text()='View All']")).click();
 		driver.findElement(By.xpath("//p[text()='Sales']")).click();
-		driver.findElement(By.xpath("//span[text()='View All Key Deals']")).click();
-		driver.findElement(By.xpath("//a[contains(@class,'slds-button slds-button--reset')]")).click();
+		WebElement deals = driver.findElement(By.xpath("//span[text()='View All Key Deals']"));
+		js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].scrollIntoView();",deals);
+		deals.click();
+		driver.findElement(By.xpath("//button[contains(@class,'slds-button slds-button--reset')]")).click();
 		driver.findElement(By.xpath("//span[text()='All Opportunities']")).click();
 		driver.findElement(By.xpath("//div[@title='New']")).click();
 		Thread.sleep(5000);		
@@ -55,23 +71,17 @@ public class Salesforce extends TestNGHooks{
 				break;
 			}
 		}
-		Thread.sleep(7000);
-		JavascriptExecutor js = (JavascriptExecutor)driver;
+		Thread.sleep(3000);		
 		js.executeScript("window.scrollBy(100,250)");
 		WebElement campaign = driver.findElement(By.xpath("//label[text()='Primary Campaign Source']/following::input"));
-		js.executeScript("arguments[0].click();", campaign);
-		
+		js.executeScript("arguments[0].click();", campaign);		
 		WebElement selCampaign = driver.findElement(By.xpath("(//span[text()='Bootcamp'])[1]"));
 		wait.until(ExpectedConditions.elementToBeClickable(selCampaign)).click();
-
 		driver.findElement(By.xpath("//label[text()='Lead Source']/following::input")).click();
-
 		List<WebElement> leadSource = driver.findElements(By.xpath("//label[text()='Lead Source']/following::span"));
 		System.out.println("Lead Source :" + leadSource.size());
-
 		for (int i = 3; i <= leadSource.size(); i = i + 3) {
 			String drpLeadSrc = driver.findElement(By.xpath("//label[text()='Lead Source']/following::span[" + i + "]")).getText();
-
 			if (drpLeadSrc.equalsIgnoreCase("Partner Referral")) {
 				driver.findElement(By.xpath("//label[text()='Lead Source']/following::span[" + i + "]")).click();
 				break;
@@ -81,11 +91,9 @@ public class Salesforce extends TestNGHooks{
 		driver.findElement(By.xpath("//button[text()='Save']")).click();		
 		WebElement sucessMsg = driver.findElement(By.xpath(" //div[text()='\"SRM Steels\"']"));
 		wait.until(ExpectedConditions.visibilityOf(sucessMsg));
-		System.out.println("Success Message is "+sucessMsg.getText());		
-
+		System.out.println("Success Message is "+sucessMsg.getText());
 		if (sucessMsg.getText().contains("SRM Steels")) {
 			System.out.println("Sales record is created");
-
 		} else {
 			System.out.println("Sales record creation failed");
 		}

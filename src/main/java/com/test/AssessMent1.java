@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,8 +21,8 @@ import org.testng.annotations.Test;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class AssessMent1 {
-	
-	
+	private String folderName = "Ragu_Assessment_Workout";
+
 	@Test
 	public void assessKnowledge() throws IOException, InterruptedException {
 		WebDriverManager.chromedriver().setup();
@@ -32,8 +33,7 @@ public class AssessMent1 {
 		FileInputStream file = new FileInputStream(".\\src\\main\\resources\\utils\\config.properties");
 		Properties prop = new Properties();
 		prop.load(file);
-
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		driver.get("https://login.salesforce.com/");
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -46,80 +46,128 @@ public class AssessMent1 {
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("(//a[contains(@class,'slds-context-bar')])[1]")).click();
 		driver.findElement(By.xpath("//button[@title='Show Navigation Menu']")).click();
-		List<WebElement> findElements = driver.findElements(By.xpath("(//ul[contains(@class,'slds-listbox_vertical')])[1]/li"));
-		System.out.println("Total Length  of dropdown list: "+findElements.size());
+		List<WebElement> findElements = driver
+				.findElements(By.xpath("(//ul[contains(@class,'slds-listbox_vertical')])[1]/li"));
+		System.out.println("Total Length  of dropdown list: " + findElements.size());
 		Thread.sleep(5000);
-		for(int i = 1; i<findElements.size();i++)
-		{
-			String val = driver.findElement(By.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])["+i+"]/span")).getText();
-			if(val.equalsIgnoreCase("Home"))
-			{
-				driver.findElement(By.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])["+i+"]/span")).click();
+		for (int i = 1; i < findElements.size(); i++) {
+			String val = driver
+					.findElement(By
+							.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])[" + i + "]/span"))
+					.getText();
+			if (val.equalsIgnoreCase("Home")) {
+				driver.findElement(
+						By.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])[" + i + "]/span"))
+						.click();
 				break;
 			}
 		}
-		
-		//driver.findElement(By.xpath("(//span[text()='Home'])")).click();
+
+		// driver.findElement(By.xpath("(//span[text()='Home'])")).click();
 		Thread.sleep(3000);
 		String openValue = driver.findElement(By.xpath("//li[@class='metric']/following::span[2]")).getText();
 		Thread.sleep(3000);
 		String goalValue = driver.findElement(By.xpath("(//li[@class='metric']/following::span[4])[1]")).getText();
-		//String openValue = "$10,000";
-		
+		// String openValue = "$10,000";
+
 		String openValRemoveChar = openValue.replaceAll("\\D", "");
 		System.out.println(openValRemoveChar);
 		String goalValRemoveChar = goalValue.replaceAll("\\D", "");
 		System.out.println(goalValRemoveChar);
 		int AfteropenValConver = Integer.parseInt(openValRemoveChar);
 		int AftergoalValConver = Integer.parseInt(goalValRemoveChar);
-		int total = AfteropenValConver +AftergoalValConver;
-		System.out.println("Open + Goal : "+total);
-		if(total<10000)
-		{
+		int total = AfteropenValConver + AftergoalValConver;
+		System.out.println("Open + Goal : " + total);
+		if (total < 10000) {
 			driver.findElement(By.xpath("//span[text()='Edit Goal']")).click();
 			driver.findElement(By.xpath("//input[contains(@class,'uiInputSmartNumber')]")).sendKeys("10000");
 			driver.findElement(By.xpath("(//button[contains(@class,'neutral uiButton')])[3]")).click();
-		}		
+		}
 		driver.findElement(By.xpath("//button[@title='Show Navigation Menu']")).click();
-		List<WebElement> elements = driver.findElements(By.xpath("(//ul[contains(@class,'slds-listbox_vertical')])[1]/li"));
-		System.out.println("Total Length  of dropdown list: "+findElements.size());
-		for(int i = 1; i<elements.size();i++)
-		{
-			String val = driver.findElement(By.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])["+i+"]/span")).getText();
-			if(val.equalsIgnoreCase("Dashboards"))
-			{
-				driver.findElement(By.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])["+i+"]/span")).click();
+		List<WebElement> elements = driver
+				.findElements(By.xpath("(//ul[contains(@class,'slds-listbox_vertical')])[1]/li"));
+		System.out.println("Total Length  of dropdown list: " + findElements.size());
+		for (int i = 1; i < elements.size(); i++) {
+			String val = driver
+					.findElement(By
+							.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])[" + i + "]/span"))
+					.getText();
+			if (val.equalsIgnoreCase("Dashboards")) {
+				driver.findElement(
+						By.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])[" + i + "]/span"))
+						.click();
 				break;
 			}
 		}
+
 		driver.findElement(By.xpath("//div[text()='New Dashboard']")).click();
-		WebElement frameswi1 = driver.findElement(By.xpath("//iframe[@title='dashboard']"));
-		driver.switchTo().frame(frameswi1);
-		Thread.sleep(3000);
-		driver.findElement(By.xpath("//input[@id='dashboardNameInput']")).sendKeys("Ragu_Assessment_Workout");
+		Thread.sleep(5000);
+		WebElement frameswin1 = driver.findElement(By.xpath("//iframe[@title='dashboard']"));
+		driver.switchTo().frame(frameswin1);
+		driver.findElement(By.cssSelector("#dashboardNameInput")).sendKeys("Ragu_Assessment_Workout");
 		driver.findElement(By.xpath("//button[text()='Create']")).click();
-		Thread.sleep(3000);		
+		Thread.sleep(3000);
 		WebElement frameswi2 = driver.findElement(By.xpath("//iframe[@title='dashboard']"));
-		driver.switchTo().frame(frameswi2);		
+		driver.switchTo().frame(frameswi2);
 		driver.findElement(By.xpath("//button[text()='Done']")).click();
+		Thread.sleep(2000);
 		driver.findElement(By.xpath("//button[text()='Subscribe']")).click();
 		Thread.sleep(3000);
-		driver.findElement(By.xpath("//span[text()='Daily']")).click();		
-		WebElement selEle = driver.findElement(By.xpath("//select[@class=' select']"));		
+		driver.switchTo().defaultContent();
+		driver.findElement(By.xpath("//span[text()='Daily']")).click();
+		WebElement selEle = driver.findElement(By.xpath("//select[@class=' select']"));
 		Select selOption = new Select(selEle);
 		selOption.selectByVisibleText("10:00 AM");
-		driver.findElement(By.xpath("//span[text()='Save']")).click();		
-		Thread.sleep(4000);		
+		driver.findElement(By.xpath("//span[text()='Save']")).click();
+		Thread.sleep(4000);
 		String subSuccess = driver.findElement(By.xpath("//div[contains(@class,'toastContent')]//span")).getText();
-		if(subSuccess.equals("You started a dashboard subscription."))
-		{
-			
-		}
-		else
-		{
+		if (subSuccess.equals("You started a dashboard subscription.")) {
+			driver.findElement(By.xpath("//button[@title='Show Navigation Menu']")).click();
+			List<WebElement> elements1 = driver
+					.findElements(By.xpath("(//ul[contains(@class,'slds-listbox_vertical')])[1]/li"));
+			System.out.println("Total Length  of dropdown list: " + findElements.size());
+			for (int i = 1; i < elements1.size(); i++) {
+				String val = driver
+						.findElement(By.xpath(
+								"((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])[" + i + "]/span"))
+						.getText();
+				if (val.equalsIgnoreCase("Dashboards")) {
+					driver.findElement(By
+							.xpath("((//ul[contains(@class,'slds-listbox_vertical')])[1]/li//span[2])[" + i + "]/span"))
+							.click();
+					break;
+				}
+			}
+
+			driver.findElement(By.xpath("(//a[text()='Private Dashboards'])[1]")).click();
+			driver.findElement(By.xpath("(//input[contains(@class,'uiInputText')])[2]")).sendKeys("Ragu_Assessment_Workout");
+			Thread.sleep(3000);
+			List<WebElement> totalElements = driver.findElements(By.xpath("//table[@role='grid']/tbody/tr"));
+			for (int j = 1; j <= totalElements.size(); j++) {
+				String text1 = driver
+						.findElement(By.xpath("//table[@role='grid']/tbody/tr[" + j + "]/th[1]//a/span[2]")).getText();
+				/*String text2 = driver.findElement(By.xpath("//table[@role='grid']/tbody/tr[\"+j+\"]/th[1]//a/span[2]"))
+						.getText();*/
+				String con = text1.concat(text1);
+				if (folderName.equals(text1)) {
+					driver.findElement(By.xpath("//table[@role='grid']/tbody/tr[" + j + "]/td[6]//button")).click();
+					driver.findElement(By.xpath("//span[text()='Delete']")).click();
+					driver.findElement(By.xpath("(//span[text()='Delete'])[2]")).click();
+					String item = driver.findElement(By.xpath("//div[contains(@class,'forceToastMessage')]//div//span"))
+							.getText();
+
+					if (item.equals("Dashboard was deleted.")) {
+						System.out.println("Item Deleted");
+					} else {
+						System.out.println("Not able to delete the item");
+					}
+
+				}
+			}
+		} else {
 			System.out.println("Mismatch");
 		}
-		
-			}
+
+	}
 
 }
