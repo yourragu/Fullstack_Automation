@@ -1,40 +1,35 @@
-package com.test;
+package com.testng;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class BoardExamSchedule {
+public class DeleteTask {
 
-	@Test
+	@Test(groups= {"regression"},dependsOnGroups= {"smoke","sanity"})
 
-	public void boardExamSch() throws InterruptedException, IOException {
+	public void deleteTask() throws InterruptedException, IOException {
 		WebDriverManager.chromedriver().setup();
 		//System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
-		//options.setExperimentalOption("debuggerAddress", "localhost:62433");
+		//options.setExperimentalOption("debuggerAddress", "localhost:62298");
 		options.addArguments("--disable-notifications");
 		//options.addArguments("--headless");
 		options.addArguments("--disable-extensions");
@@ -54,50 +49,43 @@ public class BoardExamSchedule {
 		//String version = driver.getCapabilities().getVersion();
 		//System.out.println(browserName +":"+version);
 		
+	
 		FileInputStream file = new FileInputStream(".\\src\\main\\resources\\utils\\config.properties");
 		Properties prop = new Properties();
 		prop.load(file);
+
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+		
 		driver.get("https://login.salesforce.com/");
 		//driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		driver.findElement(By.id("username")).sendKeys(prop.getProperty("username"));
 		driver.findElement(By.id("password")).sendKeys(prop.getProperty("password"));
 		driver.findElement(By.id("Login")).click();
-		driver.findElement(By.xpath("//span[text()='Learn More']")).click();
-		Set<String> windowHandles = driver.getWindowHandles();
-		for (String window : windowHandles) {
-			driver.switchTo().window(window);
-			String title = driver.getTitle();
-			if(title.equalsIgnoreCase("Certification - Architect Overview"))
-					{
-						System.out.println("Title of the page:"+title);
-					}
-			
-		}
-		Thread.sleep(2000);
-		Actions action = new Actions(driver);
-		WebElement resource = driver.findElement(By.xpath("//span[text()='Resources']"));
-		WebElement certification = driver.findElement(By.xpath("//span[text()='Salesforce Certification ']/parent::a"));
-		action.moveToElement(resource).moveToElement(certification).click().build().perform();
-		Set<String> windowHandles2 = driver.getWindowHandles();
+		WebElement appLauncher = driver.findElement(By.xpath("//div[@role='navigation']//button[1]"));
+		wait.until(ExpectedConditions.elementToBeClickable(appLauncher)).click();		
+		driver.findElement(By.xpath("//button[text()='View All']")).click();
+		driver.findElementByXPath("//p[text()='Sales']").click();
+		Thread.sleep(3000);		
+		WebElement element = driver.findElementByXPath("//span[text()='Tasks']");
+		JavascriptExecutor executor = (JavascriptExecutor) driver;
+		executor.executeScript("arguments[0].click();", element);
+		Thread.sleep(3000);		
+		driver.findElement(By.xpath("//a[@title='Select List View']")).click();
+		driver.findElement(By.xpath("(//span[text()='Recently Viewed'])[5]")).click();
+		Thread.sleep(3000);
+		WebElement x = driver.findElement(By.xpath("((//ul[@role='listbox'])[1]//li[1])[1]/a/div[1]"));
+		executor.executeScript("arguments[0].click();", x);		
+		Thread.sleep(3000);		
+		//List<WebElement> totalTabs = driver.findElements(By.xpath("//ul[contains(@class,'branding-actions')]/li"));
+		driver.findElement(By.xpath("//ul[contains(@class,'branding-actions')]/li[4]/div")).click();
+		driver.findElement(By.xpath("//a[@title='Delete']")).click();
+		driver.findElement(By.xpath("//button[@title='Delete']")).click();
+		String text = driver.findElement(By.xpath("//span[contains(@class,'toastMessage')]")).getText();
+		System.out.println(text);
+
 		
-		for (String window2 : windowHandles2) {
-			driver.switchTo().window(window2);
-			String title = driver.getTitle();
-			if(title.equalsIgnoreCase("Certification - Architect Overview"))
-					{
-						System.out.println("Title of the page:"+title);
-					}
-			
-		}
-		driver.findElement(By.xpath("//div[text()='Salesforce Architect']")).click();
-		WebElement ta = driver.findElement(By.xpath("//a[text()='Technical Architect']"));
-		((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", ta);
-		
-		driver.findElement(By.xpath("//a[text()='More Details']")).click();
 		
 	}
-
 	
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="classes">
+
+<!--<parameter name="url" value="https://www.orangehrm.com/orangehrm-30-day-trial"></parameter>
+<parameter name="subdomain" value="vishnuprathap"></parameter>
+ <parameter name="fname" value="xerox"></parameter>
+<parameter name="lname" value="Machine"></parameter>
+<parameter name="email" value="vishnu.pratap@stanventure.com"></parameter>
+<parameter name="jobTitle" value="Freelancing"></parameter>  -->
+
+  <test thread-count="5" name="Parameters">
+    <classes>
+      <class name="com.testng.TestNG_OrangeHCM"/>
+      
+    
+    </classes>
+  </test> <!-- Parameters -->
+</suite> <!-- Suite -->
