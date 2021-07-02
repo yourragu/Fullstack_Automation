@@ -1,4 +1,4 @@
-package com.testng;
+package com.baseclass;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,8 +15,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
+
+import com.utils.ReadExcel;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -26,9 +30,16 @@ public class TestNGHooks {
 	public Properties prop;
 	public ChromeOptions options;
 	public FileInputStream file;
+
+	public String sheetName;
 	
-	
-	@BeforeMethod
+	@DataProvider(name = "readValues",indices=(0))
+	public String[][] sendData() throws IOException {
+		return ReadExcel.readData("./src/main/resources/testdata/CreateLocation.xlsx", sheetName);
+
+	}
+
+	@BeforeMethod(alwaysRun = true)
 	public void beforeMethod() throws IOException {
 		file = new FileInputStream(".\\src\\main\\resources\\utils\\config.properties");
 		prop = new Properties();
@@ -39,15 +50,14 @@ public class TestNGHooks {
 			options = new ChromeOptions();
 			driver = new ChromeDriver(options);
 			options.addArguments("--disable-notifications");
-			//options.addArguments("start-maximized");
+			// options.addArguments("start-maximized");
 			driver.manage().window().maximize();
 			wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 			driver.get(prop.getProperty("url"));
 			driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 			driver.findElement(By.id("username")).sendKeys(prop.getProperty("username"));
 			driver.findElement(By.id("password")).sendKeys(prop.getProperty("password"));
-				
-			
+
 		} else if (prop.getProperty("browser").equalsIgnoreCase("firefox")) {
 			WebDriverManager.firefoxdriver().setup();
 			driver = new FirefoxDriver();
@@ -63,7 +73,7 @@ public class TestNGHooks {
 
 	}
 
-	@AfterMethod
+	@AfterMethod(alwaysRun = true)
 	public void afterMethod() {
 		driver.close();
 

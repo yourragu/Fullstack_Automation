@@ -7,19 +7,26 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.baseclass.TestNGHooks;
 import com.utils.ReadExcel;
 
 public class EditProduct extends TestNGHooks {
 	JavascriptExecutor js;
-	String filePath = ".\\src\\main\\resources\\testdata\\";
-	String wbName = "CreateLocation.xlsx";
-	String fileName = "EditProducts";
 
-	@Test(dataProvider = "readValues", threadPoolSize = 2)
+	@BeforeTest
+	public void readSheet()
+	{
+		sheetName = "EditProducts";
+	}
+	
+
+	@Test(dataProvider = "readValues", enabled = true,threadPoolSize=1)
 	public void editProduc(String oldProductName,String newProductName) throws InterruptedException {
+		System.out.println("***Execution started for Edit product***");
 		driver.findElement(By.id("Login")).click();
 		WebElement appLauncher = driver.findElement(By.xpath("//div[@role='navigation']//button[1]"));
 		wait.until(ExpectedConditions.elementToBeClickable(appLauncher)).click();
@@ -34,7 +41,6 @@ public class EditProduct extends TestNGHooks {
 		driver.findElement(By.xpath("(//*[@data-key='down'])[4]")).click();
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//span[text()='All Products']")).click();
-
 		Thread.sleep(3000);
 		driver.findElement(By.xpath("(//input[@type='search'])[2]")).sendKeys(oldProductName);
 		driver.findElement(By.xpath("(//input[@type='search'])[2]")).sendKeys(Keys.ENTER);
@@ -48,16 +54,12 @@ public class EditProduct extends TestNGHooks {
 		Thread.sleep(5000);
 		String toastMsg = driver.findElement(By.xpath("//span[contains(@class,'toastMessage')]")).getText();		
 		Thread.sleep(3000);
-		if (toastMsg.contains("newProductName")) {
+		if (toastMsg.contains(newProductName)) {
 			System.out.println(newProductName + " -> Product is successfully Edited");
 		} else {
 			System.out.println(newProductName + " -> Product is not Edited");
 		}
 	}
 
-	@DataProvider(name = "readValues")
-	public String[][] sendData() throws IOException {
-		return ReadExcel.readData(filePath, wbName, fileName);
-	}
 
 }

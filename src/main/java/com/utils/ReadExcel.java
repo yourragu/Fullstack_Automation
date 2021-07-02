@@ -10,9 +10,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ReadExcel {
 
-	public static String[][] readData(String path,String wbName,String sheetName) throws IOException{
+	public static String[][] readData(String path,String sheetName) throws IOException{
 
-		FileInputStream fis = new FileInputStream(new File(path+wbName));
+		FileInputStream fis = new FileInputStream(new File(path));
 		XSSFWorkbook wb = new XSSFWorkbook(fis);
 		XSSFSheet ws = wb.getSheet(sheetName);
 		 int rowCount = ws.getLastRowNum();
@@ -20,11 +20,10 @@ public class ReadExcel {
 		System.out.println("Total No of rows : "+rowCount);
 		//int ColCount = ws.getLastRowNum();
 		short ColCount = ws.getRow(0).getLastCellNum();
-		System.out.println("Total No of cols : "+ColCount);		
+		System.out.println("Total No of columns : "+ColCount);		
 		String[][] data = new String[rowCount][ColCount];
 		for (int i = 1; i <= rowCount; i++) {
 			for (int j = 0; j < ColCount; j++) {
-
 				String CellValue = ws.getRow(i).getCell(j).getStringCellValue();
 				data[i-1][j] = CellValue;
 				System.out.println(CellValue);				

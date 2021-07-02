@@ -6,16 +6,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.baseclass.TestNGHooks;
 import com.utils.ReadExcel;
 
 public class CreateLocation extends TestNGHooks {
 	JavascriptExecutor js;
-	String filePath = ".\\src\\main\\resources\\testdata\\";
-	String wbName = "CreateLocation.xlsx";
-	String fileName = "CreateLocation";
+	
+	@BeforeTest
+	public void readSheet()
+	{
+		sheetName = "CreateLocation";
+	}
 	
 	@Test(dataProvider = "readValues")
 	public void createLoc(String locName, String locType) throws InterruptedException {
@@ -46,9 +51,6 @@ public class CreateLocation extends TestNGHooks {
 
 	}
 
-	@DataProvider(name = "readValues")
-	public String[][] sendData() throws IOException {
-		return ReadExcel.readData(filePath,wbName,fileName);
-	}
+
 
 }

@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Suite">
-	<test thread-count="5" name="Test" parallel="methods">
-		<classes>
-			<!-- <class name="com.testng.CreateLocation"/>
-			 <class name="com.testng.CreateNewProduct"/> -->
-			<class name="com.testng.EditProduct" />
-			<class name="com.testng.CancelProduct" />
-			<class name="com.testng.DeleteProduct" />
+	<test thread-count="3" name="Test">
 
+		<!-- <groups>
+			<run>
+				<exclude name="com.testng.CreateNewProduct" />
+				<exclude name="com.testng.EditProduct" />
+			</run>
+		</groups> -->
+
+		<!-- <groups>
+			<define name="smoke">
+				<include name="com.testng.CreateNewProduct" />
+				<include name="com.testng.EditProduct" />
+			</define>
+
+			<define name="sanity">
+				<include name="com.testng.CancelProduct" />
+				<include name="com.testng.DeleteProduct" />
+			</define>
+
+			<run>
+				<include name="sanity" />
+			</run>
+		</groups>  -->
+
+		<classes>
+			
+			 <class name="com.testng.CancelProduct" />
+			<class name="com.testng.EditProduct" />			
+			<!--<class name="com.testng.DeleteProduct" />
+			<class name="com.testng.CreateLocation" />
+			<class name="com.testng.CreateNewProduct" /> -->
 		</classes>
+
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

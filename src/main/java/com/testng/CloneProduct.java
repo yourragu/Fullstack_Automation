@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 import com.baseclass.TestNGHooks;
 import com.utils.ReadExcel;
 
-public class CancelProduct extends TestNGHooks {
+public class CloneProduct extends TestNGHooks {
 	JavascriptExecutor js;
 
 	@BeforeTest

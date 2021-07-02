@@ -6,19 +6,26 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.baseclass.TestNGHooks;
 import com.utils.ReadExcel;
 
 public class CreateNewProduct extends TestNGHooks {
 	JavascriptExecutor js;
-	String filePath = ".\\src\\main\\resources\\testdata\\";
-	String wbName = "CreateLocation.xlsx";
-	String fileName = "CreateProduct";
 
-	@Test(dataProvider = "readValues", threadPoolSize = 2)
+	@BeforeTest
+	public void readSheet()
+	{
+		sheetName = "CreateProduct";
+	}
+	
+
+	@Test(dataProvider = "readValues", enabled = true,threadPoolSize=1)
 	public void createLoc(String productName, String productCode, String ProductDesc) throws InterruptedException {
+		System.out.println("***Execution started for Create new product***");
 		driver.findElement(By.id("Login")).click();
 		WebElement appLauncher = driver.findElement(By.xpath("//div[@role='navigation']//button[1]"));
 		wait.until(ExpectedConditions.elementToBeClickable(appLauncher)).click();
@@ -49,9 +56,6 @@ public class CreateNewProduct extends TestNGHooks {
 		}
 	}
 
-	@DataProvider(name = "readValues")
-	public String[][] sendData() throws IOException {
-		return ReadExcel.readData(filePath, wbName, fileName);
-	}
+
 
 }
