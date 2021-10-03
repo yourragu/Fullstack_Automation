@@ -29,10 +29,14 @@ pipeline {
     stage('Deploy UAT') {
       steps {
         echo 'Deploy UAT'
+        input 'Do you want to certif UAT'
       }
     }
 
     stage('Manual Prod Deploy') {
+      when {
+        branch 'master'
+      }
       steps {
         echo 'Deploy Prod'
       }
