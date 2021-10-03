@@ -29,7 +29,7 @@ pipeline {
     stage('Deploy UAT') {
       steps {
         echo 'Deploy UAT'
-        input 'Do you want to certif UAT'
+        input 'Do you want to certify UAT?'
       }
     }
 
