@@ -13,16 +13,26 @@ pipeline {
       }
     }
 
-    stage('QA deploy') {
-      steps {
-        echo 'QA Test'
-        echo 'API Test'
-      }
-    }
+    stage('QA Test') {
+      parallel {
+        stage('QA Test') {
+          steps {
+            echo 'API Test'
+          }
+        }
 
-    stage('QA Certification') {
-      steps {
-        echo 'Certify QA'
+        stage('QA Certify UI') {
+          steps {
+            echo 'Certify QA'
+          }
+        }
+
+        stage('QA Certify API') {
+          steps {
+            echo 'API Certify'
+          }
+        }
+
       }
     }
 
